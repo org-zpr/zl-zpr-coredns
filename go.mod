@@ -1,4 +1,4 @@
-module github.com/mkolehmainen/zl-zpr-coredns
+module github.com/org-zpr/zl-zpr-coredns
 
 go 1.25.0
 

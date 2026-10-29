@@ -11,7 +11,7 @@
 #   2. plugin.cfg — regenerate it from the new tag's upstream plugin.cfg
 #      (https://raw.githubusercontent.com/coredns/coredns/<tag>/plugin.cfg)
 #      and re-insert the zpr line after `cache:cache`:
-#        zpr:github.com/mkolehmainen/zl-zpr-coredns/plugin/zpr
+#        zpr:github.com/org-zpr/zl-zpr-coredns/plugin/zpr
 #   3. go.mod — update github.com/coredns/coredns to the new tag and
 #      github.com/miekg/dns (and github.com/coredns/caddy) to the versions the
 #      new tag's own go.mod requires, then `go mod tidy`.
@@ -45,10 +45,14 @@ $(BIN): $(shell find plugin -name '*.go') go.mod go.sum plugin.cfg
 			https://github.com/coredns/coredns.git $(COREDNS_SRC); \
 	fi
 	cp plugin.cfg $(COREDNS_SRC)/plugin.cfg
+	# Start from CoreDNS's own go.mod/go.sum on every build. `go mod edit`
+	# only adds, so without this a cached work/ keeps any previous module
+	# path for this plugin and Go refuses the two paths on one directory.
+	git -C $(COREDNS_SRC) checkout -- go.mod go.sum
 	cd $(COREDNS_SRC) && \
 		$(GO) mod edit \
-			-require=github.com/mkolehmainen/zl-zpr-coredns@v0.0.0 \
-			-replace=github.com/mkolehmainen/zl-zpr-coredns=$(CURDIR) && \
+			-require=github.com/org-zpr/zl-zpr-coredns@v0.0.0 \
+			-replace=github.com/org-zpr/zl-zpr-coredns=$(CURDIR) && \
 		$(GO) generate && \
 		$(GO) mod tidy && \
 		$(GO) build $(GOFLAGS) -o $(CURDIR)/$(BIN) .
