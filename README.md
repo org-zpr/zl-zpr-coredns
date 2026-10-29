@@ -21,7 +21,7 @@ move together when re-syncing to a newer CoreDNS release:
    one line inserted after `cache:cache`:
 
    ```
-   zpr:github.com/mkolehmainen/zl-zpr-coredns/plugin/zpr
+   zpr:github.com/org-zpr/zl-zpr-coredns/plugin/zpr
    ```
 
    To re-sync, fetch the new tag's file from
